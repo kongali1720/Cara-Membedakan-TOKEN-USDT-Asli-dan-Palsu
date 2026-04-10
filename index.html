@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USDT Verification by kongali1720</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --neon: #00ff88;
+    --neon-dim: #00cc6a;
+    --neon-glow: rgba(0, 255, 136, 0.4);
+    --danger: #ff2255;
+    --danger-glow: rgba(255, 34, 85, 0.4);
+    --warn: #ffaa00;
+    --bg-deep: #020a04;
+    --bg-card: rgba(0, 255, 136, 0.03);
+    --border: rgba(0, 255, 136, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--neon);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Matrix Rain Canvas */
+  #matrix-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  /* Scanline overlay */
+  .scanlines {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 136, 0.015) 2px,
+      rgba(0, 255, 136, 0.015) 4px
+    );
+  }
+
+  /* Moving scan bar */
+  .scan-bar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--neon), transparent);
+    box-shadow: 0 0 30px 10px var(--neon-glow);
+    z-index: 2;
+    pointer-events: none;
+    animation: scanDown 4s linear infinite;
+  }
+
+  @keyframes scanDown {
+    0% { top: -5px; }
+    100% { top: 100%; }
+  }
+
+  /* Main Container */
+  .container {
+    position: relative;
+    z-index: 10;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeSlideIn 1s ease-out;
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+    animation: pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px var(--neon-glow));
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px var(--neon-glow)); }
+    50% { transform: scale(1.08); filter: drop-shadow(0 0 40px var(--neon-glow)); }
+  }
+
+  .header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(22px, 5vw, 36px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--neon);
+    text-shadow: 0 0 10px var(--neon-glow), 0 0 30px rgba(0,255,136,0.2);
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-size: 14px;
+    color: var(--neon-dim);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  /* Brand Badge */
+  .brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 8px 20px;
+    border: 1px solid var(--neon);
+    border-radius: 50px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--neon);
+    text-shadow: 0 0 8px var(--neon-glow);
+    box-shadow: 0 0 15px rgba(0,255,136,0.1), inset 0 0 15px rgba(0,255,136,0.05);
+    animation: borderPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes borderPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(0,255,136,0.1), inset 0 0 15px rgba(0,255,136,0.05); }
+    50% { box-shadow: 0 0 25px rgba(0,255,136,0.25), inset 0 0 25px rgba(0,255,136,0.1); }
+  }
+
+  .brand-badge i {
+    font-size: 10px;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* Input Section */
+  .input-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+    animation: fadeSlideIn 1.2s ease-out;
+  }
+
+  .input-section label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--neon-dim);
+    margin-bottom: 12px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .input-row input {
+    flex: 1;
+    background: rgba(0,255,136,0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    color: var(--neon);
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .input-row input::placeholder {
+    color: rgba(0,255,136,0.25);
+  }
+
+  .input-row input:focus {
+    border-color: var(--neon);
+    box-shadow: 0 0 20px rgba(0,255,136,0.15), inset 0 0 10px rgba(0,255,136,0.05);
+  }
+
+  .btn-scan {
+    background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05));
+    border: 1px solid var(--neon);
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--neon);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+
+  .btn-scan:hover {
+    background: linear-gradient(135deg, rgba(0,255,136,0.3), rgba(0,255,136,0.1));
+    box-shadow: 0 0 30px rgba(0,255,136,0.3);
+    transform: translateY(-2px);
+  }
+
+  .btn-scan:active {
+    transform: translateY(0);
+  }
+
+  .btn-scan:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Verification Cards */
+  .check-cards {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+
+  .check-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.5s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .check-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 0%; height: 100%;
+    background: linear-gradient(90deg, rgba(0,255,136,0.08), transparent);
+    transition: width 0.8s ease;
+  }
+
+  .check-card.scanning::before {
+    width: 100%;
+  }
+
+  .check-card.pass {
+    border-color: var(--neon);
+    box-shadow: 0 0 15px rgba(0,255,136,0.1);
+  }
+
+  .check-card.pass::before {
+    background: linear-gradient(90deg, rgba(0,255,136,0.1), transparent);
+    width: 100%;
+  }
+
+  .check-card.fail {
+    border-color: var(--danger);
+    box-shadow: 0 0 15px var(--danger-glow);
+  }
+
+  .check-card.fail::before {
+    background: linear-gradient(90deg, rgba(255,34,85,0.1), transparent);
+    width: 100%;
+  }
+
+  .check-card.fail .card-icon { color: var(--danger); }
+  .check-card.fail .card-status { color: var(--danger); }
+
+  .card-icon {
+    font-size: 24px;
+    width: 40px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: all 0.5s;
+  }
+
+  .card-info {
+    flex: 1;
+  }
+
+  .card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: rgba(0,255,136,0.4);
+  }
+
+  .card-status {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    transition: all 0.5s;
+  }
+
+  .card-status.waiting { color: rgba(0,255,136,0.2); }
+  .card-status.checking { color: var(--warn); animation: blink 0.5s step-end infinite; }
+  .card-status.pass { color: var(--neon); text-shadow: 0 0 8px var(--neon-glow); }
+  .card-status.fail { color: var(--danger); text-shadow: 0 0 8px var(--danger-glow); }
+
+  /* Result Panel */
+  .result-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    display: none;
+    animation: resultReveal 0.6s ease-out;
+  }
+
+  @keyframes resultReveal {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .result-panel.visible { display: block; }
+
+  .result-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+
+  .result-icon.safe {
+    color: var(--neon);
+    filter: drop-shadow(0 0 30px var(--neon-glow));
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .result-icon.danger {
+    color: var(--danger);
+    filter: drop-shadow(0 0 30px var(--danger-glow));
+    animation: shake 0.5s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+
+  .result-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+
+  .result-title.safe { color: var(--neon); text-shadow: 0 0 15px var(--neon-glow); }
+  .result-title.danger { color: var(--danger); text-shadow: 0 0 15px var(--danger-glow); }
+
+  .result-detail {
+    font-size: 13px;
+    color: rgba(0,255,136,0.5);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto 20px;
+  }
+
+  .btn-reset {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--neon-dim);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .btn-reset:hover {
+    border-color: var(--neon);
+    color: var(--neon);
+    box-shadow: 0 0 15px rgba(0,255,136,0.15);
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border);
+    animation: fadeSlideIn 1.5s ease-out;
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--neon);
+    text-shadow: 0 0 10px var(--neon-glow);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(0,255,136,0.35);
+    margin-top: 4px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 11px;
+    color: rgba(0,255,136,0.2);
+    letter-spacing: 2px;
+  }
+
+  .footer span {
+    color: var(--neon-dim);
+    text-shadow: 0 0 6px var(--neon-glow);
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    z-index: 999;
+    transform: translateX(120%);
+    transition: transform 0.4s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .toast.show { transform: translateX(0); }
+
+  .toast.warn {
+    background: rgba(255,170,0,0.15);
+    border: 1px solid rgba(255,170,0,0.4);
+    color: var(--warn);
+  }
+
+  /* Particle container */
+  .particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--neon);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--neon-glow);
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    .input-row { flex-direction: column; }
+    .stats-bar { gap: 20px; }
+    .stat-num { font-size: 22px; }
+    .check-card { padding: 16px; gap: 12px; }
+  }
+
+  /* Prefers reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+<div class="scanlines"></div>
+<div class="scan-bar"></div>
+<div class="particles" id="particles"></div>
+
+<!-- Toast -->
+<div class="toast warn" id="toast">
+  <i class="fa-solid fa-triangle-exclamation"></i> Masukkan alamat USDT terlebih dahulu
+</div>
+
+<div class="container">
+  <header class="header">
+    <div class="logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
+    <h1>USDT Verification</h1>
+    <p class="subtitle">Detect Fake vs Real USDT</p>
+    <div class="brand-badge">
+      <i class="fa-solid fa-circle"></i>
+      Powered by kongali1720
+    </div>
+  </header>
+
+  <section class="input-section">
+    <label for="address-input"><i class="fa-solid fa-link"></i> USDT Contract / Wallet Address</label>
+    <div class="input-row">
+      <input type="text" id="address-input" placeholder="0x... atau masukkan alamat TRC20" autocomplete="off" spellcheck="false">
+      <button class="btn-scan" id="btn-scan" onclick="startScan()">
+        <i class="fa-solid fa-radar"></i> Scan
+      </button>
+    </div>
+  </section>
+
+  <section class="check-cards" id="check-cards">
+    <div class="check-card" id="check-contract">
+      <div class="card-icon"><i class="fa-solid fa-file-contract"></i></div>
+      <div class="card-info">
+        <div class="card-title">Contract Check</div>
+        <div class="card-desc">Verifikasi keaslian smart contract USDT</div>
+      </div>
+      <div class="card-status waiting">Waiting</div>
+    </div>
+    <div class="check-card" id="check-branding">
+      <div class="card-icon"><i class="fa-solid fa-tag"></i></div>
+      <div class="card-info">
+        <div class="card-title">Branding Check</div>
+        <div class="card-desc">Deteksi token impostor & nama palsu</div>
+      </div>
+      <div class="card-status waiting">Waiting</div>
+    </div>
+    <div class="check-card" id="check-freeze">
+      <div class="card-icon"><i class="fa-solid fa-snowflake"></i></div>
+      <div class="card-info">
+        <div class="card-title">Freeze Status</div>
+        <div class="card-desc">Cek apakah address dibekukan blacklist</div>
+      </div>
+      <div class="card-status waiting">Waiting</div>
+    </div>
+    <div class="check-card" id="check-supply">
+      <div class="card-icon"><i class="fa-solid fa-coins"></i></div>
+      <div class="card-info">
+        <div class="card-title">Supply Check</div>
+        <div class="card-desc">Validasi total supply resmi Tether</div>
+      </div>
+      <div class="card-status waiting">Waiting</div>
+    </div>
+    <div class="check-card" id="check-holder">
+      <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+      <div class="card-info">
+        <div class="card-title">Holder Analysis</div>
+        <div class="card-desc">Analisis distribusi & konsentrasi token</div>
+      </div>
+      <div class="card-status waiting">Waiting</div>
+    </div>
+  </section>
+
+  <section class="result-panel" id="result-panel">
+    <div class="result-icon" id="result-icon"></div>
+    <div class="result-title" id="result-title"></div>
+    <div class="result-detail" id="result-detail"></div>
+    <button class="btn-reset" onclick="resetAll()"><i class="fa-solid fa-rotate-left"></i> Scan Ulang</button>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-scanned">1,847</div>
+      <div class="stat-label">Total Scanned</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-fake">312</div>
+      <div class="stat-label">Fake Detected</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-safe">1,535</div>
+      <div class="stat-label">Verified Safe</div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>kongali1720</span> &mdash; USDT Verification System &copy; 2025
+  </footer>
+</div>
+
+<script>
+// ========== Matrix Rain ==========
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const matrixChars = 'USDT0123456789ABCDEFkongali1720$';
+const fontSize = 14;
+let columns = Math.floor(canvas.width / fontSize);
+let drops = Array(columns).fill(1);
+
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(2, 10, 4, 0.06)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00ff88';
+  ctx.font = fontSize + 'px Share Tech Mono, monospace';
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+
+setInterval(drawMatrix, 50);
+
+window.addEventListener('resize', () => {
+  columns = Math.floor(canvas.width / fontSize);
+  drops = Array(columns).fill(1);
+});
+
+// ========== Floating Particles ==========
+const particleContainer = document.getElementById('particles');
+
+function createParticle() {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.bottom = '-5px';
+  const size = Math.random() * 3 + 1;
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  const dur = Math.random() * 8 + 6;
+  p.style.animationDuration = dur + 's';
+  p.style.animationDelay = Math.random() * 2 + 's';
+  particleContainer.appendChild(p);
+  setTimeout(() => p.remove(), (dur + 2) * 1000);
+}
+
+setInterval(createParticle, 400);
+
+// ========== Toast ==========
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ========== Scan Logic ==========
+const checks = [
+  { id: 'check-contract', passRate: 0.7, passText: 'Verified', failText: 'Mismatch' },
+  { id: 'check-branding', passRate: 0.75, passText: 'Original', failText: 'Impostor' },
+  { id: 'check-freeze', passRate: 0.85, passText: 'Clear', failText: 'Frozen' },
+  { id: 'check-supply', passRate: 0.9, passText: 'Valid', failText: 'Invalid' },
+  { id: 'check-holder', passRate: 0.65, passText: 'Healthy', failText: 'Suspicious' },
+];
+
+let isScanning = false;
+
+function startScan() {
+  const input = document.getElementById('address-input').value.trim();
+  if (!input) {
+    showToast('Masukkan alamat USDT terlebih dahulu');
+    return;
+  }
+  if (isScanning) return;
+  isScanning = true;
+
+  const btn = document.getElementById('btn-scan');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Scanning';
+
+  // Reset semua card
+  checks.forEach(c => {
+    const card = document.getElementById(c.id);
+    card.className = 'check-card';
+    card.querySelector('.card-status').className = 'card-status waiting';
+    card.querySelector('.card-status').textContent = 'Waiting';
+  });
+
+  document.getElementById('result-panel').classList.remove('visible');
+
+  // Simulasi scan satu per satu
+  let results = [];
+  let i = 0;
+
+  function scanNext() {
+    if (i >= checks.length) {
+      finishScan(results);
+      return;
+    }
+
+    const c = checks[i];
+    const card = document.getElementById(c.id);
+    const status = card.querySelector('.card-status');
+
+    // Mulai scanning
+    card.classList.add('scanning');
+    status.className = 'card-status checking';
+    status.textContent = 'Scanning...';
+
+    setTimeout(() => {
+      card.classList.remove('scanning');
+      const passed = Math.random() < c.passRate;
+      results.push(passed);
+
+      if (passed) {
+        card.classList.add('pass');
+        status.className = 'card-status pass';
+        status.textContent = c.passText;
+      } else {
+        card.classList.add('fail');
+        status.className = 'card-status fail';
+        status.textContent = c.failText;
+      }
+
+      i++;
+      scanNext();
+    }, 800 + Math.random() * 600);
+  }
+
+  scanNext();
+}
+
+function finishScan(results) {
+  const allPass = results.every(r => r);
+  const panel = document.getElementById('result-panel');
+  const icon = document.getElementById('result-icon');
+  const title = document.getElementById('result-title');
+  const detail = document.getElementById('result-detail');
+
+  if (allPass) {
+    icon.innerHTML = '<i class="fa-solid fa-shield-halved"></i>';
+    icon.className = 'result-icon safe';
+    title.textContent = 'VERIFIED SAFE';
+    title.className = 'result-title safe';
+    detail.textContent = 'Alamat USDT terverifikasi aman oleh sistem kongali1720. Contract valid, branding asli, dan tidak terdeteksi freeze.';
+  } else {
+    const failCount = results.filter(r => !r).length;
+    icon.innerHTML = '<i class="fa-solid fa-skull-crossbones"></i>';
+    icon.className = 'result-icon danger';
+    title.textContent = 'DANGER DETECTED';
+    title.className = 'result-title danger';
+    detail.textContent = failCount + ' dari ' + results.length + ' pemeriksaan GAGAL. Token ini kemungkinan palsu atau berbahaya. Jangan transaksi!';
+  }
+
+  panel.classList.add('visible');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  // Update stats
+  const scannedEl = document.getElementById('stat-scanned');
+  const fakeEl = document.getElementById('stat-fake');
+  const safeEl = document.getElementById('stat-safe');
+  let s = parseInt(scannedEl.textContent.replace(',', ''));
+  s++;
+  scannedEl.textContent = s.toLocaleString();
+  if (allPass) {
+    let v = parseInt(safeEl.textContent.replace(',', ''));
+    v++;
+    safeEl.textContent = v.toLocaleString();
+  } else {
+    let f = parseInt(fakeEl.textContent.replace(',', ''));
+    f++;
+    fakeEl.textContent = f.toLocaleString();
+  }
+
+  const btn = document.getElementById('btn-scan');
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-radar"></i> Scan';
+  isScanning = false;
+}
+
+function resetAll() {
+  document.getElementById('address-input').value = '';
+  document.getElementById('result-panel').classList.remove('visible');
+
+  checks.forEach(c => {
+    const card = document.getElementById(c.id);
+    card.className = 'check-card';
+    card.querySelector('.card-status').className = 'card-status waiting';
+    card.querySelector('.card-status').textContent = 'Waiting';
+  });
+
+  document.getElementById('address-input').focus();
+}
+
+// Enter key trigger
+document.getElementById('address-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') startScan();
+});
+
+// Counter animasi awal
+function animateCounter(el, target) {
+  let current = 0;
+  const step = Math.ceil(target / 60);
+  const interval = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(interval);
+    }
+    el.textContent = current.toLocaleString();
+  }, 20);
+}
+
+// Jalankan animasi counter saat load
+window.addEventListener('load', () => {
+  animateCounter(document.getElementById('stat-scanned'), 1847);
+  animateCounter(document.getElementById('stat-fake'), 312);
+  animateCounter(document.getElementById('stat-safe'), 1535);
+});
+</script>
+</body>
+</html>
