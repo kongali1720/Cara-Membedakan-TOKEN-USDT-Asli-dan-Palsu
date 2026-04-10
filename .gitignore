@@ -1,0 +1,8 @@
+# C++
+*.o
+*.out
+checker
+
+# OS
+.DS_Store
+Thumbs.db
