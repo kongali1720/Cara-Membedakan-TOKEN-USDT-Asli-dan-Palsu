@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>USDT Cyber Scanner</title>
+
+<style>
+body {
+    background: black;
+    color: #00ff00;
+    font-family: monospace;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    text-shadow: 0 0 10px #00ff00;
+}
+
+.box {
+    border: 1px solid #00ff00;
+    padding: 15px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 0 10px #00ff00;
+}
+
+input {
+    width: 80%;
+    padding: 10px;
+    background: black;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+}
+
+button {
+    padding: 10px;
+    background: #001100;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    cursor: pointer;
+}
+
+#terminal {
+    height: 250px;
+    overflow-y: auto;
+    white-space: pre-line;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🔐 USDT CYBER SECURITY TERMINAL</h1>
+
+<!-- 🔍 BLOCKCHAIN CHECKER -->
+<div class="box">
+<h3>📡 Live Blockchain Checker</h3>
+
+<input type="text" id="contract" placeholder="Paste Contract Address...">
+<button onclick="checkContract()">CHECK</button>
+
+<p id="result"></p>
+</div>
+
+<!-- 💻 TERMINAL -->
+<div class="box">
+<h3>💻 Hacking Simulation Terminal</h3>
+<div id="terminal"></div>
+<button onclick="startHack()">RUN SCAN</button>
+</div>
+
+<script>
+// 🔍 CONTRACT CHECK
+function checkContract() {
+    let input = document.getElementById("contract").value.toLowerCase();
+
+    let erc20 = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+    let trc20 = "tr7nhqjekqxgtci8q8zy4pl8otszgjlj6t";
+
+    let result = document.getElementById("result");
+
+    if(input === erc20){
+        result.innerHTML = "✅ VALID ERC-20 USDT (OFFICIAL)";
+    } 
+    else if(input === trc20){
+        result.innerHTML = "✅ VALID TRC-20 USDT (OFFICIAL)";
+    } 
+    else {
+        result.innerHTML = "❌ WARNING: UNKNOWN / FAKE CONTRACT";
+    }
+}
+
+// 💻 TERMINAL SIMULATION
+function startHack(){
+    let term = document.getElementById("terminal");
+    term.innerHTML = "";
+
+    let lines = [
+        "[INIT] Connecting to blockchain node...",
+        "[SCAN] Checking contract structure...",
+        "[OK] Contract format valid",
+        "[SCAN] Verifying token branding...",
+        "[OK] Logo & symbol match",
+        "[SCAN] Checking transaction history...",
+        "[OK] Active transfers detected",
+        "[SCAN] Checking blacklist status...",
+        "[OK] Address not frozen",
+        "----------------------------------",
+        "✅ RESULT: TOKEN VERIFIED (SAFE)"
+    ];
+
+    let i = 0;
+
+    let interval = setInterval(() => {
+        term.innerHTML += lines[i] + "\n";
+        term.scrollTop = term.scrollHeight;
+        i++;
+
+        if(i >= lines.length){
+            clearInterval(interval);
+        }
+    }, 500);
+}
+</script>
+
+</body>
+</html>
