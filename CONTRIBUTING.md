@@ -1,26 +1,44 @@
-# 🤝 Contributing Guide
+# 🤝 CONTRIBUTING GUIDE
 
-Terima kasih sudah ingin berkontribusi!
-
-## 📌 Cara Berkontribusi
-1. Fork repository ini
-2. Buat branch baru:
-   ```bash
-   git checkout -b fitur-baru
-   ```
-```bash
-git commit -m "Menambahkan fitur baru"
-```
+<p align="center">
+  <b>⚡ Join the Mission: Anti-Scam • Crypto Security • Blockchain Awareness ⚡</b>
+</p>
 
 ---
 
+## 📌 Cara Berkontribusi
+
+Ikuti langkah berikut untuk ikut berkontribusi:
+
+### 1️⃣ Fork Repository
+Klik tombol **Fork** di kanan atas
+
+---
+
+### 2️⃣ Buat Branch Baru
 ```bash
+git checkout -b fitur-baru
+```
+
+```
 git push origin fitur-baru
 ```
 
-----
++ Fokus edukasi & keamanan crypto
++ Gunakan bahasa yang jelas & profesional
 
-⚠️ Rules
-Tidak boleh scam / penipuan
-Fokus edukasi & keamanan
-Gunakan bahasa yang jelas
+- Dilarang scam / penipuan
+- Dilarang manipulasi data
+
+###💬 Diskusi & Support
+
+## Gunakan tab Issues untuk:
+
+💡 Ide baru
+🐛 Bug report
+❓ Pertanyaan
+🔐 Catatan Penting
+
+Project ini dibuat untuk edukasi & keamanan crypto, bukan untuk aktivitas ilegal.
+
+<p align="center"> ⚡ Together We Build Secure Crypto Ecosystem ⚡ </p> 
